@@ -170,4 +170,8 @@ CMakeFiles/NetworkAnalyzer.dir/NetworkAnalyzer.cpp.o: \
  /usr/include/netinet/in.h /usr/include/bits/in.h \
  /usr/include/rpc/netdb.h /usr/include/bits/types/sigevent_t.h \
  /usr/include/bits/types/__sigval_t.h /usr/include/bits/netdb.h \
- /usr/include/arpa/inet.h /usr/include/pcap/bpf.h /usr/include/pcap/dlt.h
+ /usr/include/arpa/inet.h /usr/include/pcap/bpf.h /usr/include/pcap/dlt.h \
+ /usr/include/unistd.h /usr/include/bits/posix_opt.h \
+ /usr/include/bits/environments.h /usr/include/bits/confname.h \
+ /usr/include/bits/getopt_posix.h /usr/include/bits/getopt_core.h \
+ /usr/include/bits/unistd_ext.h /usr/include/linux/close_range.h

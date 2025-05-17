@@ -1,10 +1,22 @@
 #include "NetworkAnalyzer.h"
 #include <iostream>
 #include <pcap.h>
+#include <unistd.h>
 
 // Dispositivo
 char source[30];
-pcap_t* handle;
+pcap_t *handle;
+
+// Compruebo que el programa haya sido ejecutado con privilegios
+int checkRoot()
+{
+    if (geteuid() != 0)
+    {
+        std::cout << "El programa debe de ejecutarse como root/administrador" << "\n";
+        return -1;
+    }
+    return 0;
+}
 
 // Inicio el capturador de paquetes (pcap)
 int initPcap()
@@ -15,7 +27,7 @@ int initPcap()
 
     if (pcap_init(PCAP_CHAR_ENC_UTF_8, errbuf) != 0)
     {
-        std::cout << "Error al iniciar el capturador de paquetes" << "\n";
+        std::cout << "Error al iniciar el capturador de paquetes. Error: " << errbuf << "\n";
         return -1;
     }
 
@@ -24,9 +36,32 @@ int initPcap()
     return 0;
 }
 
+// Líneas copiadas de CHATGPT, repasar
+int listDevices()
+{
+    pcap_if_t *alldevs;
+    char errbuf[PCAP_ERRBUF_SIZE];
+
+    if (pcap_findalldevs(&alldevs, errbuf) == -1)
+    {
+        std::cerr << "Error: " << errbuf << std::endl;
+        return 1;
+    }
+
+    // Ahora 'alldevs' apunta a la lista de interfaces disponibles
+    for (pcap_if_t *d = alldevs; d != nullptr; d = d->next)
+    {
+        std::cout << "Interface: " << d->name << std::endl;
+    }
+
+    pcap_freealldevs(alldevs); // Liberar memoria
+    return 0;
+}
+
 char *askSource()
 {
-    // Aquí debería listar las interfaces TO-DO
+    char errbuf[PCAP_ERRBUF_SIZE];
+    listDevices();
     std::cout << "Introduce la interfaz de red para la captura: ";
     std::cin >> source;
     // Aquí debería comprobar si la interfaz existe TO-DO
@@ -41,7 +76,7 @@ int createPcap()
     handle = pcap_create(source, errbuf);
     if (handle == NULL)
     {
-        std::cout << "Error al crear el HANDLE, compruebe el dispositivo" << "\n";
+        std::cout << "Error: " << errbuf << "\n";
         return -1;
     }
 
@@ -51,10 +86,12 @@ int createPcap()
 }
 
 // Activar el handle creado anteriormente
-int activateHandle(){
+int activateHandle()
+{
     if (pcap_activate(handle) < 0)
     {
-        std::cout << "Error al activar el handle\n";
+        std::cout << "Error al activar el handle" << "\n";
+        pcap_close(handle);
         return -1;
     }
     if (pcap_activate(handle) > 0)
@@ -63,14 +100,14 @@ int activateHandle(){
         return -1;
     }
 
-    std::cout << "El handle ha sido activado...";
+    std::cout << "El handle ha sido activado...\n";
 
     return 0;
-    
 }
 
 int program()
 {
+    if (checkRoot() != 0){return -1;}
     initPcap();
     createPcap();
     activateHandle();

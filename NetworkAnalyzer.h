@@ -2,6 +2,6 @@
 #define NetworkAnalyzer_h
 
 // Métodos a implementar
-int initPcap();
+int program();
 
 #endif

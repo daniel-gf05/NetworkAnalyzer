@@ -3,6 +3,6 @@
 
 int main(){
     std::cout << "/-NetworkAnalyzer-/" << "\n";
-    initPcap();
+    program();
     return 0;
 }

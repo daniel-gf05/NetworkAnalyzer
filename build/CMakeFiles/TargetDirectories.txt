@@ -1,0 +1,3 @@
+/home/daniel/coding/C++/TrafficAnalyzer/build/CMakeFiles/NetworkAnalyzer.dir
+/home/daniel/coding/C++/TrafficAnalyzer/build/CMakeFiles/edit_cache.dir
+/home/daniel/coding/C++/TrafficAnalyzer/build/CMakeFiles/rebuild_cache.dir
